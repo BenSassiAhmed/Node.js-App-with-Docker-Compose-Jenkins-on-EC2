@@ -4,7 +4,7 @@ def gv
 pipeline{
     agent any
     environment {
-        IMAGE_TAG = $BUILD_NUMBER
+        IMAGE_TAG = "${BUILD_NUMBER}"
         docker_credentials = 'docker-hub-repo'
     }
     stages{
