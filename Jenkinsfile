@@ -40,7 +40,7 @@ pipeline{
             steps{
                 script{
                     echo "pushing image to dockerhub ..."
-                    sh "docker push ${imageName}:${tag}"
+                    sh "docker push ${imageName}:${IMAGE_TAG}"
                 }
             }
         }
