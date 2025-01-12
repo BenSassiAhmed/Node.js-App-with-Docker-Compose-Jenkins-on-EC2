@@ -22,8 +22,8 @@ pipeline{
                 script{
                     gv.buildImage(
                         'bensassiahmed/node-app',
-                        "${IMAGE_TAG}",
-                        "${docker_credentials}"
+                        '1',
+                        "docker-hub-repo"
                     )
                 }
             }
