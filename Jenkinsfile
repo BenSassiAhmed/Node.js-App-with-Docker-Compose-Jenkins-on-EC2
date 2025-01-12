@@ -21,7 +21,7 @@ pipeline{
         stage("build image"){
             steps{
                 script{
-                    gv = buildImage(
+                    gv.buildImage(
                         'bensassiahmed/node-app',
                         "${IMAGE_TAG}",
                         "${docker_credentials}"
