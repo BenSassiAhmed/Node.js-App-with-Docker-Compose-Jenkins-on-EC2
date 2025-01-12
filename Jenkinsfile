@@ -1,13 +1,13 @@
-def gv
 
 pipeline{
     agent any
     environment {
         IMAGE_TAG = "${BUILD_NUMBER}"
         docker_credentials = 'docker-hub-repo'
+        imageName = 'bensassiahmed/node-app'
     }
     stages{
-
+/* 
         stage("init"){
             steps{
                 script{
@@ -16,27 +16,31 @@ pipeline{
                     
                 }
             }
-        }
+        } */
 
         stage("build image"){
             steps{
                 script{
-                    gv.buildimage(
-                        'bensassiahmed/node-app',
-                        '1',
-                        "docker-hub-repo"
-                    )
+                    echo "building the docker image..."
+                    withCredentials([
+                        usernamePassword(
+                            credentialsId: "${docker_credentials}" ,
+                            passwordVariable: 'PASS', 
+                            usernameVariable: 'USER')
+                    ]){
+                        sh "docker build -t ${imageName}:${IMAGE_TAG} ."
+                        sh "echo $PASS | docker login -u $USER --password-stdin"
                 }
+                        
+                    }
             }
         }
 
         stage("push image"){
             steps{
                 script{
-                    gv.pushimage(
-                        'bensassiahmed/node-app',
-                        "${IMAGE_TAG}"
-                    )
+                    echo "pushing image to dockerhub ..."
+                    sh "docker push ${imageName}:${tag}"
                 }
             }
         }
