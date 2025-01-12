@@ -1,3 +1,6 @@
+#!/usr/bin/env groovy
+
+def gv
 
 pipeline{
     agent any
@@ -7,7 +10,7 @@ pipeline{
         imageName = 'bensassiahmed/node-app'
     }
     stages{
-/* 
+
         stage("init"){
             steps{
                 script{
@@ -16,22 +19,16 @@ pipeline{
                     
                 }
             }
-        } */
+        } 
 
         stage("build image"){
             steps{
                 script{
-                    echo "building the docker image..."
-                    withCredentials([
-                        usernamePassword(
-                            credentialsId: "${docker_credentials}" ,
-                            passwordVariable: 'PASS', 
-                            usernameVariable: 'USER')
-                    ]){
-                        sh "docker build -t ${imageName}:${IMAGE_TAG} ."
-                        sh "echo $PASS | docker login -u $USER --password-stdin"
-                }
-                        
+                    gv.buildImage(
+                        "${imageName}",
+                        "${IMAGE_TAG}",
+                        "${docker_credentials}"
+                    )     
                     }
             }
         }
@@ -39,8 +36,10 @@ pipeline{
         stage("push image"){
             steps{
                 script{
-                    echo "pushing image to dockerhub ..."
-                    sh "docker push ${imageName}:${IMAGE_TAG}"
+                   gv.pushImage(
+                    "${imageName}",
+                    "${IMAGE_TAG}"
+                   )
                 }
             }
         }
