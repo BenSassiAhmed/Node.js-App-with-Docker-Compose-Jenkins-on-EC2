@@ -12,6 +12,7 @@ pipeline{
             steps{
                 script{
                     gv = load "script.groovy"
+                    echo "Groovy script loaded: ${gv}"
                     
                 }
             }
@@ -20,7 +21,7 @@ pipeline{
         stage("build image"){
             steps{
                 script{
-                    gv.buildImage(
+                    gv.buildimage(
                         'bensassiahmed/node-app',
                         '1',
                         "docker-hub-repo"
@@ -32,7 +33,7 @@ pipeline{
         stage("push image"){
             steps{
                 script{
-                    gv.pushImage(
+                    gv.pushimage(
                         'bensassiahmed/node-app',
                         "${IMAGE_TAG}"
                     )

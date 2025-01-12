@@ -1,4 +1,4 @@
-def buildImage(String imageName, String tag, String crendId){
+def buildimage(String imageName, String tag, String crendId){
     echo "building the docker image..."
     withCredentials([
         usernamePassword(
@@ -11,7 +11,7 @@ def buildImage(String imageName, String tag, String crendId){
     }
 }
 
-def pushImage (String imageName, String tag){
+def pushimage (String imageName, String tag){
     echo "pushing image to dockerhub ..."
     sh "docker push ${imageName}:${tag}"
 }
