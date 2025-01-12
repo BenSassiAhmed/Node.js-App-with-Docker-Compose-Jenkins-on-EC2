@@ -7,7 +7,7 @@ def buildImage(String imageName, String tag, String crendId){
             usernameVariable: 'USER')
     ]){
         sh "docker build -t ${imageName}:${tag} ."
-        sh "echo $PASSWORD | docker login -u $USER --password-stdin"
+        sh "echo $PASS | docker login -u $USER --password-stdin"
     }
 }
 
