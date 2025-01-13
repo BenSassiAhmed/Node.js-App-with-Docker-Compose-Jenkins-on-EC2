@@ -48,7 +48,7 @@ pipeline{
             steps {
                 script {
                     sh """
-                        sed -i 's/\\${IMAGE_TAG}/${IMAGE_TAG}/g' docker-compose.yaml
+                        sed -i 's|bensassiahmed/node-app:.*|bensassiahmed/node-app:${IMAGE_TAG}|g' docker-compose.yaml
                     """
                     // Define the Docker command
                     def dockerCmd = 'docker-compose up -d'
