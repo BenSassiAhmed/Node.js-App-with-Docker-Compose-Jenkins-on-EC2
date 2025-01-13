@@ -1,6 +1,6 @@
 services:
   my-app:
-    image: bensassiahmed/node-mongo:${IMAGE_TAG}
+    image: bensassiahmed/node-app:${IMAGE_TAG}
     ports:
       - 3000:3000
     networks: 
