@@ -14,7 +14,7 @@ pipeline{
         stage('Check Committer') {
             steps {
                 script {
-                    // Get the committer's email or username
+                    // Get the committer's email 
                     def committerEmail = sh(script: 'git log -1 --pretty=format:"%ae"', returnStdout: true).trim()
                     // Skip the build if the commit was made by Jenkins
                     if (committerEmail == "jenkins@example.com") {
