@@ -1,6 +1,6 @@
 services:
   my-app:
-    image: bensassiahmed/node-app:23
+    image: bensassiahmed/node-app:24
     ports:
       - 3000:3000
     networks: 
