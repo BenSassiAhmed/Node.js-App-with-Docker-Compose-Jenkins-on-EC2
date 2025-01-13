@@ -54,8 +54,8 @@ pipeline{
                     def dockerCmd = 'docker-compose up -d'
                     // Use SSH Agent to execute the command on the EC2 instance
                     sshagent(credentials: ['ec2-server-key']) {
-                        sh "scp docker-compose.yaml ec2-user@35.181.4.178:/home/ec2-user "
-                        sh "ssh -o StrictHostKeyChecking=no ec2-user@35.181.4.178 ${dockerCmd}"
+                        sh "scp docker-compose.yaml ec2-user@35.180.196.12:/home/ec2-user "
+                        sh "ssh -o StrictHostKeyChecking=no ec2-user@35.180.196.12 ${dockerCmd}"
                     }
                 }
             }
