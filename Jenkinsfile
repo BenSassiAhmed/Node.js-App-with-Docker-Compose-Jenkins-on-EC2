@@ -11,22 +11,30 @@ pipeline{
     }
     stages{
 
-        stage('Check Committer') {
+       stage('Check Committer') {
             steps {
                 script {
-                    // Get the committer's email 
-                    def committerEmail = sh(script: 'git log -1 --pretty=format:"%ae"', returnStdout: true).trim()
-                    // Skip the build if the commit was made by Jenkins
-                    if (committerEmail == "jenkins@example.com") {
-                        echo "Skipping build because the commit was made by Jenkins."
-                        currentBuild.result = 'ABORTED'
-                        return
+                    // Check if the build was triggered manually
+                    def isManualBuild = currentBuild.rawBuild.getCauses().toString().contains('UserIdCause')
+
+                    // Skip the committer check for manual builds
+                    if (!isManualBuild) {
+                        // Get the committer's email or username
+                        def committerEmail = sh(script: 'git log -1 --pretty=format:"%ae"', returnStdout: true).trim()
+                        def committerName = sh(script: 'git log -1 --pretty=format:"%an"', returnStdout: true).trim()
+
+                        // Skip the build if the commit was made by Jenkins
+                        if (committerEmail == "jenkins@example.com" || committerName == "jenkins") {
+                            echo "Skipping build because the commit was made by Jenkins."
+                            currentBuild.result = 'NOT_BUILT' // Use NOT_BUILT instead of ABORTED
+                            return
+                        }
+                    } else {
+                        echo "Build was triggered manually. Skipping committer check."
                     }
                 }
             }
         }
-
-
 
         stage("init"){
             steps{
