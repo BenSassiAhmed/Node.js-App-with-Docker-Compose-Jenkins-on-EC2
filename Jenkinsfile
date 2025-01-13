@@ -11,6 +11,23 @@ pipeline{
     }
     stages{
 
+        stage('Check Committer') {
+            steps {
+                script {
+                    // Get the committer's email or username
+                    def committerEmail = sh(script: 'git log -1 --pretty=format:"%ae"', returnStdout: true).trim()
+                    // Skip the build if the commit was made by Jenkins
+                    if (committerEmail == "jenkins@example.com") {
+                        echo "Skipping build because the commit was made by Jenkins."
+                        currentBuild.result = 'ABORTED'
+                        return
+                    }
+                }
+            }
+        }
+
+
+
         stage("init"){
             steps{
                 script{
@@ -61,19 +78,21 @@ pipeline{
             }
         }
 
-/*
-       stage("deploy to ec2") {
+        stage('commit version update') {
             steps {
                 script {
-                    def dockercmd= 'docker run -d --name app -p 8080:8080 bensassiahmed/project989:jma-${IMAGE_NAME} '
-                        sshagent(['ec2-server-key']) {
-                            sh "ssh -o StrictHostKeyChecking=no ubuntu@34.228.11.54 ${dockercmd}"
-                        }
+                    withCredentials([usernamePassword(credentialsId: 'github-credentials', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
+                        // git config here for the first time run
+                        sh 'git config --global user.email "jenkins@example.com"'
+                        sh 'git config --global user.name "jenkins"'
+
+                        sh "git remote set-url origin https://${USER}:${PASS}@github.com/BenSassiAhmed/java-maven-app.git"
+                        sh 'git add .'
+                        sh 'git commit -m "ci: version bump"'
+                        sh 'git push origin HEAD:main'
                     }
                 }
             }
         }
-*/ 
-            
     } 
 }
