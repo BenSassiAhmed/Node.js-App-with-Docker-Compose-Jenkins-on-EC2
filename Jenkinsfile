@@ -11,11 +11,11 @@ pipeline{
     }
     stages{
 
-       stage('Check Committer') {
+      stage('Check Committer') {
             steps {
                 script {
                     // Check if the build was triggered manually
-                    def isManualBuild = currentBuild.rawBuild.getCauses().toString().contains('UserIdCause')
+                    def isManualBuild = currentBuild.getBuildCauses('hudson.model.Cause$UserIdCause')
 
                     // Skip the committer check for manual builds
                     if (!isManualBuild) {
